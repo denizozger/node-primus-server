@@ -1,0 +1,26 @@
+{
+  "name": "node-primus-server",
+  "subdomain": "node-primus-server",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/denizozger/node-primus-server.git"
+  },
+  "dependencies": {
+    "primus": "~1.5.0",
+    "ws": "~0.4.31",
+    "express": "~3.4.7",
+    "npmlog": "0.0.6",
+    "zmq": "~2.5.1",
+    "async": "~0.2.9",
+    "argh": "~0.1.1",
+    "primus-rooms": "~2.2.0"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}
