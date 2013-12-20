@@ -45,7 +45,7 @@ function handleClientConnected(clientConnection) {
   }
 
   var resourceId = getResourceId(clientConnection);
-  observeResource(clientConnection, resourceId);
+  clientConnection.join(resourceId, null);
 
   var existingResourceData = resourceData[resourceId];
 
@@ -54,15 +54,6 @@ function handleClientConnected(clientConnection) {
   } else {
     requestResource(resourceId);
   }
-}
-
-function observeResource(clientConnection, resourceId) {
-  var currentResourceObservers = resourceObservers[resourceId] || [];
- 
-   currentResourceObservers.push(clientConnection);
-   resourceObservers[resourceId] = currentResourceObservers;
-
-   logNewObserver(clientConnection, resourceId);
 }
 
 // Publish a resource request for a resrouce that we don't have in memory (ie. in resourceData)
@@ -104,57 +95,9 @@ function storeResourceData(resource) {
 }
 
 function notifyObservers(resourceId) {
-  var currentResourceObservers = resourceObservers[resourceId];
-  
   var data = resourceData[resourceId];
 
-  if (currentResourceObservers) {
-    async.forEach(currentResourceObservers, function(thisObserver){
-
-      if (thisObserver.readyState !== 2) {
-        sendResourceDataToObserver(thisObserver, data);
-      } else {
-        // We need to find the index ourselves, see https://github.com/caolan/async/issues/144
-        // Discussion: When a resource terminates, and all observers disconnect but
-          // currentResourceObservers will still be full.
-        var indexOfTheObserver = getIndexOfTheObserver(currentResourceObservers, thisObserver);
-
-        unobserveResource(currentResourceObservers, resourceId, indexOfTheObserver);
-      }
-    },
-    function(err){
-      log.error('Cant broadcast resource data to watching observer:', err);  
-    });        
-  } else {
-    log.verbose('No observers watching this resource: ' + resourceId);
-  }
-}
-
-function getIndexOfTheObserver(observersWatchingThisResource, observerToFind) {
-  for (var i = 0; i < observersWatchingThisResource.length; i++) {
-    var observer = observersWatchingThisResource[i];
-
-    if (observer === observerToFind) {
-      return i;
-    }
-  }
-}
-
-function unobserveResource(observersWatchingThisResource, resourceId, indexOfTheObserver) {
-  observersWatchingThisResource.splice(indexOfTheObserver, 1);
-
-  if (observersWatchingThisResource.length === 0) { 
-    removeResource(resourceId);
-  } 
-
-  logRemovedObserver();
-}
-
-function removeResource(resourceId) {
-  log.verbose('Removing resource ( ' + resourceId + ') from memory');
-
-  delete resourceObservers[resourceId];
-  delete resourceData[resourceId];   
+  primus.room(resourceId).write(data);
 }
 
 function getResourceId(clientConnection) {
