@@ -11,7 +11,7 @@ Socket = Primus.createSocket({
 log.level = 'verbose';
 
 var sockets = [];
-var maxSockets = 135;
+var maxSockets = 120;
 var connectionAttempts = 0;
 
 function connectToWebSocket() {
@@ -46,7 +46,8 @@ function connectToWebSocket() {
   });
 
   socket.on('error', function error(err) {
-    log.error('error', 'Erorr', 'An unknown error has occured <code>'+ err.message +'</code>');
+    log.error(err);
+    // log.error('error', 'Erorr', 'An unknown error has occured <code>'+ err.message +'</code>');
   });
 
   socket.on('end', function end() {

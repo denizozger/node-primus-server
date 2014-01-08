@@ -14,7 +14,12 @@
     "zmq": "~2.5.1",
     "async": "~0.2.9",
     "argh": "~0.1.1",
-    "primus-rooms": "~2.2.0"
+    "primus-rooms": "~2.2.0",
+    "engine.io": "~0.8.0",
+    "engine.io-client": "~0.8.0",
+    "strong-agent": "~0.2.19",
+    "socket.io": "~0.9.16",
+    "socket.io-client": "~0.9.16"
   },
   "engines": {
     "node": "0.10.x",
@@ -22,5 +27,13 @@
   },
   "scripts": {
     "start": "node server.js"
+  },
+  "strongloop": {
+    "id": "c1ece425b4ed39c316acd2e2a916cb37",
+    "name": "Deniz Ozger",
+    "userKey": "c1ece425b4ed39c316acd2e2a916cb37",
+    "email": "deniz@parallelbrains.com",
+    "created": "2013-12-11T17:00:04.000Z",
+    "sid": "RAPqY-KZdJIsQfOzV2GEnrcu"
   }
 }

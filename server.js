@@ -8,7 +8,8 @@ const express = require('express'),
   primus = new Primus(server, { parser: 'JSON', transformer: 'websockets' }),
   log = require('npmlog'),
   zmq = require('zmq'),
-  async = require('async');
+  async = require('async'),
+  strongloop = require('strong-agent').profile();
 
 log.level = process.env.LOGGING_LEVEL || 'verbose';
 
@@ -45,7 +46,9 @@ function handleClientConnected(clientConnection) {
   }
 
   var resourceId = getResourceId(clientConnection);
+  
   clientConnection.join(resourceId, null);
+  logNewObserver(clientConnection, resourceId);
 
   var existingResourceData = resourceData[resourceId];
 
@@ -152,7 +155,7 @@ process.on('SIGINT', function() {
 
 function logNewObserver(clientConnection, resourceId) {
   log.info('New connection for ' + resourceId + '. This resource\'s observers: ' + 
-    resourceObservers[resourceId].length + ', Total observers : ', primus.connected);
+    primus.room(resourceId).clients().length + ', Total observers : ', primus.connected);
 }
 
 function logRemovedObserver() {
@@ -163,7 +166,7 @@ function logRemovedObserver() {
 function logResourceObservers() {
   for (var resourceId in resourceObservers) {
     if (resourceObservers.hasOwnProperty(resourceId)) {
-      log.verbose(resourceObservers[resourceId].length + ' observers are watching ' + resourceId );
+      log.verbose(primus.room(resourceId).clients().length + ' observers are watching ' + resourceId );
     }
   }
 }
