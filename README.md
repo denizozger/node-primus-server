@@ -21,7 +21,7 @@ Please see [node-fetcher](https://github.com/denizozger/node-fetcher) and [node-
 
 Go to [localhost:5000/?matchesfeed/8/matchcentre](localhost:5000/?matchesfeed/8/matchcentre) for a demo
   
-When you have all three applications, you should start node-socketio as:
+When you have all three applications, you should start node-primus-server as:
 
 ``` bash
 PORT=5000 FETCHER_ADDRESS='http://localhost:4000/fetchlist/new/' NODE_ENV=development node --harmony server.js
