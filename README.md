@@ -5,8 +5,8 @@ This Node application perioducally receives JSON data from another web applicati
 # Running Locally
 
 ``` bash
-npm --harmony install
-node server.js
+npm install
+node --harmony server.js
 ```
 
 ## How it works
